@@ -1,8 +1,8 @@
 package ru.dobrotrener.recipeapp.domain;
 
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -22,9 +22,13 @@ public class Recipe {
     private Integer cookTime;
     private Integer servings;
 
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
     //TODO add
     // private Difficulty difficulty
 
+    @Lob
     private Byte[] image;
 
     public Recipe() {
@@ -111,5 +115,13 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 }
