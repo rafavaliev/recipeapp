@@ -1,9 +1,14 @@
 package ru.dobrotrener.recipeapp.domain;
 
 
+import lombok.*;
+
 import javax.persistence.*;
 
+@Data
 @Entity
+@EqualsAndHashCode(exclude = {"recipe"})
+@ToString(exclude = {"recipe"})
 public class Notes {
 
     @Id
@@ -19,27 +24,13 @@ public class Notes {
     public Notes() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
+    public Notes(Recipe recipe, String recipeNotes) {
         this.recipe = recipe;
-    }
-
-    public String getRecipeNotes() {
-        return recipeNotes;
-    }
-
-    public void setRecipeNotes(String recipeNotes) {
         this.recipeNotes = recipeNotes;
     }
+
+    protected boolean canEqual(Object other) {
+        return other instanceof Notes;
+    }
+
 }

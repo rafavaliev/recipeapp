@@ -3,8 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Recipe home</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 </head>
 <body>
-<h1>Recipies home</h1>
+
+<div class="container-fluid" style="margin-top: 20px">
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Recipies home</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+                        <table class="table thead-inverse">
+                            <tr>
+                                <td>ID</td>
+                                <td>Description</td>
+                                <td><a href="#">View</a></td>
+                                <td><a href="#">Update</a></td>
+                                <td>Delete</td>
+                            </tr>
+                            <tr th:remove="all">
+                                <td>0</td>
+                                <td>Example</td>
+                                <td><a href="/recipe/0/show">View</a></td>
+                                <td><a href="/recipe/0/update">Update</a></td>
+                                <td><a href="/recipe/0/delete">Delete</a></td>
+                            </tr>
+                            <tr th:each="recipe : ${recipes}">
+                                <td th:text="${recipe.id}">1</td>
+                                <td th:text="${recipe.description}">Guacamole</td>
+                                <td><a th:href="@{'/recipe/' + ${recipe.id}} + '/show'">View</a></td>
+                                <td><a th:href="@{'/recipe/' + ${recipe.id}} + '/update'">Update</a></td>
+                                <td><a th:href="@{'/recipe/' + ${recipe.id}} + '/delete'">Delete</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

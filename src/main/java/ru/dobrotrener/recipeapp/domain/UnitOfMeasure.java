@@ -1,11 +1,14 @@
 package ru.dobrotrener.recipeapp.domain;
 
 
+import lombok.*;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Data
 @Entity
 public class UnitOfMeasure {
 
@@ -13,25 +16,13 @@ public class UnitOfMeasure {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String description;
 
-    public UnitOfMeasure(String name) {
-        this.name = name;
+    public UnitOfMeasure() {
     }
 
-    public Long getId() {
-        return id;
+    public UnitOfMeasure(String description) {
+        this.description = description;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
