@@ -11,11 +11,12 @@ import ru.dobrotrener.recipeapp.domain.Ingredient;
 import ru.dobrotrener.recipeapp.domain.Recipe;
 import ru.dobrotrener.recipeapp.repositories.IngredientRepository;
 import ru.dobrotrener.recipeapp.repositories.RecipeRepository;
+import ru.dobrotrener.recipeapp.repositories.UnitOfMeasureRepository;
+
 import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.longThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,6 +30,7 @@ public class IngredientServiceImplTest {
     @Autowired
     private IngredientRepository ingredientRepository;
 
+    private UnitOfMeasureRepository unitOfMeasureRepository;
     private IngredientService ingredientService;
 
 
@@ -36,7 +38,9 @@ public class IngredientServiceImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        ingredientService = new IngredientServiceImpl(ingredientRepository, recipeRepository);
+        ingredientService = new IngredientServiceImpl(ingredientRepository,
+                recipeRepository,
+                unitOfMeasureRepository);
     }
 
     @Test

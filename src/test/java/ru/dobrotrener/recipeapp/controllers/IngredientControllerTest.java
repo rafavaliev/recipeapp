@@ -10,6 +10,7 @@ import ru.dobrotrener.recipeapp.commands.IngredientCommand;
 import ru.dobrotrener.recipeapp.commands.RecipeCommand;
 import ru.dobrotrener.recipeapp.services.IngredientService;
 import ru.dobrotrener.recipeapp.services.RecipeService;
+import ru.dobrotrener.recipeapp.services.UnitOfMeasureService;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -32,11 +33,14 @@ public class IngredientControllerTest {
 
     IngredientController controller;
 
+    @Mock
+    UnitOfMeasureService unitOfMeasureService;
+
     MockMvc mockMvc;
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new IngredientController(recipeService, ingredientService);
+        controller = new IngredientController(recipeService, ingredientService, unitOfMeasureService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
