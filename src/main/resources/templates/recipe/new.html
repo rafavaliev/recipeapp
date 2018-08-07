@@ -17,7 +17,6 @@
             crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<!--/*@thymesVar id="recipe" type="ru.dobrotrener.recipeapp.domain.Recipe"*/-->
 <div class="container-fluid" style="margin-top: 20px">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
@@ -66,9 +65,11 @@
                                 <div class="col-md-3 form-group">
                                     <label>Difficulty:</label>
                                     <select class="form-control" th:field="*{difficulty}">
+                                        <!--/*@thymesVar id="difficultyValue" type="ru.dobrotrener.recipeapp.domain.Difficulty"*/-->
                                         <option th:each="difficultyValue : ${T(ru.dobrotrener.recipeapp.domain.Difficulty).values()}"
                                                 th:value="${difficultyValue.name()}"
-                                                th:text="${difficultyValue.name()}"
+
+                                                th:text="${difficultyValue.name().toLowerCase()}"
                                         >val</option>
                                     </select>
                                     <select class="form-control" th:remove="all">

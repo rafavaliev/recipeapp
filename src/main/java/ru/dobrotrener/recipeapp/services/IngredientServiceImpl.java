@@ -13,6 +13,7 @@ import ru.dobrotrener.recipeapp.repositories.IngredientRepository;
 import ru.dobrotrener.recipeapp.repositories.RecipeRepository;
 import ru.dobrotrener.recipeapp.repositories.UnitOfMeasureRepository;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
@@ -61,6 +62,33 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Transactional
+    public void deleteByRecipeIdAndId(Long recipeId, Long id) {
+        Optional<Recipe> recipeOptional= recipeRepository.findById(recipeId);
+
+        if (recipeOptional.isPresent()) {
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+                    .filter(ingredient -> ingredient.getId().equals(id))
+                    .findFirst();
+
+            if (ingredientOptional.isPresent()) {
+                Ingredient ingredient = ingredientOptional.get();
+                ingredient.setRecipe(null);
+                recipe.getIngredients().remove(ingredientOptional.get());
+                recipeRepository.save(recipe);
+            } else {
+                log.debug("Ingredient for recipe with id: " + recipeId +
+                        " and with id: " + id + " not found");
+            }
+        } else {
+            log.debug("Recipe with id: " + recipeId + " not found");
+        }
+
+    }
+
+    @Override
+    @Transactional
     public IngredientCommand saveIngredientCommand(IngredientCommand command) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
 
@@ -85,16 +113,24 @@ public class IngredientServiceImpl implements IngredientService {
                             .orElseThrow(() -> new RuntimeException("UoM not found")));
 
         } else {
-            recipe.addIngredient(ingredientCommandToIngredient.convert(command));
+            Ingredient ingredient = (ingredientCommandToIngredient.convert(command));
+            ingredient.setRecipe(recipe);
+            recipe.addIngredient(ingredient);
         }
 
         Recipe savedRecipe = recipeRepository.save(recipe);
 
-        //to do check for fail
-        return ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
+        Optional<Ingredient> savedIngredientOptional = savedRecipe.getIngredients().stream()
                 .filter(recipeIngredient -> recipeIngredient.getId().equals(command.getId()))
-                .findFirst()
-                .get()
-        );
+                .findFirst();
+
+        if (!savedIngredientOptional.isPresent()) {
+            savedIngredientOptional = savedRecipe.getIngredients().stream()
+                    .filter(ingredient -> ingredient.getDescription().equals(command.getDescription()))
+                    .filter(ingredient -> ingredient.getAmount().equals(command.getAmount()))
+                    .filter(ingredient -> ingredient.getUom().getId().equals(command.getUom().getId()))
+                    .findFirst();
+        }
+        return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
     }
 }

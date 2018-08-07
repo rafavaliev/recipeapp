@@ -6,6 +6,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.dobrotrener.recipeapp.commands.IngredientCommand;
 import ru.dobrotrener.recipeapp.domain.Ingredient;
 import ru.dobrotrener.recipeapp.domain.Recipe;
@@ -16,6 +19,7 @@ import ru.dobrotrener.recipeapp.repositories.UnitOfMeasureRepository;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -37,10 +41,10 @@ public class IngredientServiceImplTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-
         ingredientService = new IngredientServiceImpl(ingredientRepository,
                 recipeRepository,
                 unitOfMeasureRepository);
+
     }
 
     @Test
@@ -75,4 +79,26 @@ public class IngredientServiceImplTest {
         assertEquals(Long.valueOf(1L), ingredientCommand.getRecipeId());
         verify(recipeRepository, times(1)).findById(anyLong());
     }
+
+    @Test
+    public void deleteIngredient() throws Exception {
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(2L);
+        recipe.addIngredient(ingredient);
+        ingredient.setRecipe(recipe);
+        Optional<Recipe> recipeOptional = Optional.of(recipe);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        //when
+        ingredientService.deleteByRecipeIdAndId(1L, 2L);
+
+        //then
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).save(any(Recipe.class));
+    }
+
+
 }

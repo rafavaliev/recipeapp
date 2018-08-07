@@ -50,7 +50,7 @@
                             </div>
                             <div class="col-md-6">
                                 <img src="../../static/images/guacamole400x400WithX.jpg"
-                                     th:src="@{'/recipe/' + ${recipe.id} + '/recipeimage'}"
+                                     th:src="@{'/recipe/' + ${recipe.id} + '/image/show'}"
                                      width="200" height="200">
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                                 <h5>Difficulty:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p th:text="${recipe.difficulty}">Easy</p>
+                                <p th:text="${recipe.difficulty.name().toLowerCase()}">Easy</p>
                             </div>
                         </div>
                         <div class="row">
