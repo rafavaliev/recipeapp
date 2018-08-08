@@ -6,6 +6,7 @@ import ru.dobrotrener.recipeapp.commands.RecipeCommand;
 import ru.dobrotrener.recipeapp.converters.RecipeCommandToRecipe;
 import ru.dobrotrener.recipeapp.converters.RecipeToRecipeCommand;
 import ru.dobrotrener.recipeapp.domain.Recipe;
+import ru.dobrotrener.recipeapp.exceptions.NotFoundException;
 import ru.dobrotrener.recipeapp.repositories.RecipeRepository;
 
 import javax.transaction.Transactional;
@@ -43,7 +44,7 @@ public class RecipeServiceImpl implements RecipeService {
         Optional<Recipe> recipe = recipeRepository.findById(id);
 
         if (!recipe.isPresent()) {
-            throw new RuntimeException("Recipe not found");
+            throw new NotFoundException("Recipe not found for id:" + id);
         }
         return recipe.get();
     }

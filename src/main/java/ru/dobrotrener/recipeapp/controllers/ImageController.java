@@ -47,13 +47,16 @@ public class ImageController {
     @GetMapping("/recipe/{id}/image/show")
     public void showRenderedImage(@PathVariable("id") String recipeId,
                                     HttpServletResponse response) throws Exception {
+
         RecipeCommand command = recipeService.findCommandById(Long.valueOf(recipeId));
+        byte[] bytes = new byte[0];
+        if (command != null && command.getImage() != null) {
+            bytes = new byte[command.getImage().length];
 
-        byte[] bytes = new byte[command.getImage().length];
-
-        int i = 0;
-        for (Byte wrap : command.getImage()) {
-            bytes[i++] = wrap;
+            int i = 0;
+            for (Byte wrap : command.getImage()) {
+                bytes[i++] = wrap;
+            }
         }
 
         response.setContentType("image/jpeg");

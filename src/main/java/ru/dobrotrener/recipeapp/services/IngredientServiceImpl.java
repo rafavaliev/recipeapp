@@ -9,6 +9,7 @@ import ru.dobrotrener.recipeapp.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import ru.dobrotrener.recipeapp.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import ru.dobrotrener.recipeapp.domain.Ingredient;
 import ru.dobrotrener.recipeapp.domain.Recipe;
+import ru.dobrotrener.recipeapp.exceptions.NotFoundException;
 import ru.dobrotrener.recipeapp.repositories.IngredientRepository;
 import ru.dobrotrener.recipeapp.repositories.RecipeRepository;
 import ru.dobrotrener.recipeapp.repositories.UnitOfMeasureRepository;
@@ -44,7 +45,7 @@ public class IngredientServiceImpl implements IngredientService {
 
         if (!recipeOptional.isPresent()) {
             log.error("Recipe not found with id: " + recipeId);
-            return null;
+            throw new NotFoundException("Recipe not found with id: " + recipeId);
         }
 
         Recipe recipe = recipeOptional.get();
@@ -55,7 +56,7 @@ public class IngredientServiceImpl implements IngredientService {
                 .findFirst();
         if (!ingredientCommandOptional.isPresent()) {
             log.error("Ingredient not found with id: " + ingredientId);
-            return null;
+            throw new NotFoundException("Ingredient not found with id: " + ingredientId);
         }
         return ingredientCommandOptional.get();
     }

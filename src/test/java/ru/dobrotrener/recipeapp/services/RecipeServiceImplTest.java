@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import ru.dobrotrener.recipeapp.converters.RecipeCommandToRecipe;
 import ru.dobrotrener.recipeapp.converters.RecipeToRecipeCommand;
 import ru.dobrotrener.recipeapp.domain.Recipe;
+import ru.dobrotrener.recipeapp.exceptions.NotFoundException;
 import ru.dobrotrener.recipeapp.repositories.RecipeRepository;
 
 import javax.swing.text.html.Option;
@@ -87,5 +88,22 @@ public class RecipeServiceImplTest {
         verify(recipeRepository, times(1)).deleteById(anyLong());
     }
 
+    @Test(expected = NotFoundException.class)
+    public void getRecipeByIdNotFoundTest() throws Exception {
+        Optional<Recipe> recipeOptional = Optional.empty();
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+        Recipe recipeReturned = recipeService.findById(1L);
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public void getRecipeByIdWithNumberFormatExceptionTest() throws Exception {
+        Optional<Recipe> recipeOptional = Optional.empty();
+
+        when(recipeRepository.findById(any())).thenThrow(NumberFormatException.class);
+
+        Recipe recipeReturned = recipeService.findById(1L);
+    }
 
 }

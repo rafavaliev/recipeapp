@@ -10,7 +10,11 @@ import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.dobrotrener.recipeapp.commands.RecipeCommand;
 import ru.dobrotrener.recipeapp.domain.Recipe;
+import ru.dobrotrener.recipeapp.exceptions.NotFoundException;
+import ru.dobrotrener.recipeapp.repositories.RecipeRepository;
 import ru.dobrotrener.recipeapp.services.RecipeService;
+
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -100,5 +104,22 @@ public class RecipeControllerTest {
         verify(recipeService, times(1)).deleteById(anyLong());
     }
 
+    @Test
+    public void testGetRecipeNotFound() throws Exception {
+        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404"));
+
+    }
+
+    @Test
+    public void testGetRecipeNumberFormat() throws Exception {
+        mockMvc.perform(get("/recipe/GREATEST/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("404"));
+
+    }
 
 }
