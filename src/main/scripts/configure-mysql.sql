@@ -1,5 +1,5 @@
 ## Use to run mysql db docker image, optional if you're not using a local mysqldb
-# docker run -d -p 3307:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -v ~/Documents/dev/mysql2:/var/lib/mysql --name sfg_prod mysql:5.6
+#  docker run -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true -v ~/Documents/dev/mysql:/var/lib/mysql --name sfg_dev mysql:5.6
 
 
 # Connect to mysql database and run as root user
@@ -25,11 +25,13 @@ GRANT SELECT ON sfg_prod.* TO 'sfg_prod_user'@'localhost';
 GRANT UPDATE ON sfg_prod.* TO 'sfg_prod_user'@'localhost';
 GRANT INSERT ON sfg_prod.* TO 'sfg_prod_user'@'localhost';
 GRANT DELETE ON sfg_prod.* TO 'sfg_prod_user'@'localhost';
+GRANT CREATE ON sfg_dev.* TO 'sfg_dev_user'@'localhost';
 
 GRANT SELECT ON sfg_dev.* TO 'sfg_dev_user'@'%';
 GRANT UPDATE ON sfg_dev.* TO 'sfg_dev_user'@'%';
 GRANT INSERT ON sfg_dev.* TO 'sfg_dev_user'@'%';
 GRANT DELETE ON sfg_dev.* TO 'sfg_dev_user'@'%';
+GRANT CREATE ON sfg_dev.* TO 'sfg_dev_user'@'%';
 
 GRANT SELECT ON sfg_prod.* TO 'sfg_prod_user'@'%';
 GRANT UPDATE ON sfg_prod.* TO 'sfg_prod_user'@'%';

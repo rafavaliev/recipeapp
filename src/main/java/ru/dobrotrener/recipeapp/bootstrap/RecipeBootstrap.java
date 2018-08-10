@@ -2,6 +2,7 @@ package ru.dobrotrener.recipeapp.bootstrap;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import ru.dobrotrener.recipeapp.domain.*;
@@ -15,8 +16,11 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("ConstantConditions")
 @Component
 @Slf4j
+@Profile("default")
+
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     private RecipeRepository recipeRepository;
@@ -41,11 +45,12 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     private void initRecipes() {
-        log.debug("Init recipes");
+        log.debug("Loading Bootstrap H2 data");
         checkIfPredefinedExist();
         List<Recipe> recipes = new ArrayList<>(2);
         recipes.add(initGuacamole());
         recipes.add(initChicken());
+        log.debug("Loaded some recipes. Recipe list size: " + recipes.size());
 
     }
 
@@ -125,11 +130,11 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                 "Pint", "Piece", "Pound", "Dash", "Qunce");
         List<String> categories = Arrays.asList("American", "Italian", "Mexican", "Fast food");
 
-        unitsOfMeasure.stream().forEach(description -> {
+        unitsOfMeasure.forEach(description -> {
             checkIfUnitExist(description);
             unitOfMeasureMap.put(description, unitOfMeasureRepository.findByDescription(description).get());
         });
-        categories.stream().forEach(description -> checkIfCategoryExist(description));
+        categories.forEach(this::checkIfCategoryExist);
 
     }
 
