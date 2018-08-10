@@ -22,18 +22,12 @@ import java.util.*;
 @Profile({"dev", "prod"})
 public class BootstrapMySQL implements ApplicationListener<ContextRefreshedEvent> {
 
-    private RecipeRepository recipeRepository;
     private UnitOfMeasureRepository unitOfMeasureRepository;
     private CategoryRepository categoryRepository;
-    private IngredientRepository ingredientRepository;
 
-
-    public BootstrapMySQL(RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository,
-                          CategoryRepository categoryRepository, IngredientRepository ingredientRepository) {
-        this.recipeRepository = recipeRepository;
+    public BootstrapMySQL(UnitOfMeasureRepository unitOfMeasureRepository, CategoryRepository categoryRepository) {
         this.unitOfMeasureRepository = unitOfMeasureRepository;
         this.categoryRepository = categoryRepository;
-        this.ingredientRepository = ingredientRepository;
     }
 
     @Override
